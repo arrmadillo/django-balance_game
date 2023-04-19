@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <div>
+      <h3><a href="{% url 'accounts:profile' user %}">{{ user }}</a></h3>
+      <div>
+        <form action="{% url 'accounts:logout' %}" method="POST">
+          {% csrf_token %}
+          <p><input type="submit" value="로그아웃"></p>
+        </form>
+        <a href="#">[글 작성]</a>
+      </div>
+    </div>
+  {% else %}
+    <div>
+      <a href="{% url 'accounts:login' %}">[로그인]</a>
+      <a href="{% url 'accounts:signup' %}">[회원가입]</a>
+    </div>
+  {% endif %}
+  {% for post in posts %}
+    <p><a href="{% url 'posts:detail' post.pk %}">{{ post.title }}</a></p>
+  {% endfor %}
+
+{% endblock content %}
