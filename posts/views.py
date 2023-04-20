@@ -17,10 +17,12 @@ def index(request):
     return render(request, 'posts/index.html', context)
 
 def sort_order(queryset, order):
-    if order == '참여많은 순서':
+    if order == 'voter':
         return queryset.alias(voter=(Count('select1_user')+Count('select2_user'))).order_by('-voter')
-    elif order == '참여적은 순서':
-        return queryset.alias(voter=(Count('select1_user')+Count('select2_user'))).order_by('voter')
+    elif order == 'likes':
+        return queryset.alias(likes=Count('like_users')).order_by('-likes')
+    elif order == 'last':
+        return queryset.order_by('-pk')
     else:
         return queryset
 
