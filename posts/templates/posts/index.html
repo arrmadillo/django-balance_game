@@ -18,6 +18,14 @@
       <a href="{% url 'accounts:signup' %}">[회원가입]</a>
     </div>
   {% endif %}
+  {# 참여순 정렬 #}
+  <form action="{% url 'posts:index' %}">
+    {% if get_order == '참여많은 순서' %}
+      <input type="submit" name="order" value="참여적은 순서">
+    {% else %}
+      <input type="submit" name="order" value="참여많은 순서">
+    {% endif %}
+  </form>
   {% for post in posts %}
     <p><a href="{% url 'posts:detail' post.pk %}">{{ post.title }}</a></p>
   {% endfor %}
