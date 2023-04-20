@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Post
-from .forms import PostForm
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
 
 # Create your views here.
 
@@ -16,10 +16,16 @@ def detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     select1_user_count = post.select1_user.count()
     select2_user_count = post.select2_user.count()
+
+    comments = post.comment_set.all()
+    comment_form = CommentForm()
+
     context = {
         'post': post,
         'select1_user_count':select1_user_count,
         'select2_user_count':select2_user_count,
+        'comments': comments,
+        'comment_form': comment_form,
     }
     return render(request, 'posts/detail.html', context)
 
@@ -56,3 +62,25 @@ def select(request, post_pk, answer):
         return redirect('posts:detail', post_pk=post_pk)
 
     return redirect('posts:detail', post_pk=post_pk)
+
+
+@login_required
+def comment_create(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.user = request.user
+        comment.post = post
+        comment.save()
+    return redirect('posts:detail', post.pk)
+
+#게시글 좋아요
+@login_required
+def likes(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    if post.like_users.filter(pk=request.user.pk).exists():
+        post.like_users.remove(request.user)
+    else:
+        post.like_users.add(request.user)
+    return redirect('posts:detail', post_pk)
