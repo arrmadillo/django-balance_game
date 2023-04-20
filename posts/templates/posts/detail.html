@@ -1,6 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Detail</h1>
-<p>제목 - {{ post.title }}</p>
+<div class="container">
+    <div class="row">
+        <p>제목 - {{ post.title }}</p>
+    </div>
+    <div class="row">
+        <p>작성자 - {{ post.user }}</p>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>선택1: {{ post.select1_content }}</p>
+            <img src="{{ post.select1_image.url }}" alt="" width='200px'>
+        </div>
+        <div class="col">
+            <p>선택2: {{ post.select2_content }}</p>
+            <img src="{{ post.select2_image.url }}" alt="" width='200px'>
+        </div>
+    </div>
+</div>
+
+
 {% endblock content %}

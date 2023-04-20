@@ -9,7 +9,7 @@
           {% csrf_token %}
           <p><input type="submit" value="로그아웃"></p>
         </form>
-        <a href="#">[글 작성]</a>
+        <a href="{% url 'posts:create' %}">[주제 작성]</a>
       </div>
     </div>
   {% else %}
