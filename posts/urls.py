@@ -8,5 +8,5 @@ urlpatterns = [
     # 주제생성
     path('create/', views.create, name='create'),
     # 선택
-    path('<int:post_pk>/select/<str:select>/', views.select, name='select'),
+    path('<int:post_pk>/select/<str:answer>/', views.select, name='select'),
 ]

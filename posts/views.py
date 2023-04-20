@@ -43,15 +43,14 @@ def create(request):
 
 @login_required
 def select(request, post_pk, answer):
-    print("test")
     post = Post.objects.get(pk=post_pk)
     user = request.user
     if user in post.select1_user.all() or user in post.select2_user.all():
         return redirect('posts:detail', post_pk=post_pk)
 
-    if answer == "post.select1_content":
+    if answer == post.select1_content:
         post.select1_user.add(user)
-    elif answer == "post.select2_content":
+    elif answer == post.select2_content:
         post.select2_user.add(user)
     else:
         return redirect('posts:detail', post_pk=post_pk)

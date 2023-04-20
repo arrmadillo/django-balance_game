@@ -21,14 +21,14 @@
     </div>
     <div class="row">
         <div class="col">
-            <form action="{% url 'posts:select' post.pk post.select1_content %}">
+            <form action="{% url 'posts:select' post_pk=post.pk answer=post.select1_content %}">
                 {% csrf_token %}
                 <button type="submit">{{ post.select1_content }}</button>
             </form>
             <p>{{ select1_user_count }}</p>
         </div>
         <div class="col">
-            <form action="{% url 'posts:select' post.pk post.select2_content %}">
+            <form action="{% url 'posts:select' post_pk=post.pk answer=post.select2_content %}">
                 {% csrf_token %}
                 <button type="submit">{{ post.select2_content }}</button>
             </form>
