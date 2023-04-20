@@ -10,7 +10,7 @@ urlpatterns = [
     # 선택
     path('<int:post_pk>/select/<str:answer>/', views.select, name='select'),
     # 댓글 작성
-    path('<int:post_pk>/comment/', views.comment_create, name='comment_create'),
+    path('<int:post_pk>/comments/', views.comment_create, name='comment_create'),
     # 게시글 좋아요
-    # path('')
+    path('<int:post_pk>/likes/', views.likes, name="likes"),
 ]

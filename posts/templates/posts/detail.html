@@ -40,7 +40,18 @@
     </div>
 
     {# 게시글 좋아요 #}
-
+    <form action="{% url 'posts:likes' post.pk %}" method="POST">
+      {% csrf_token %}
+      {% if request.user.is_authenticated %}
+        {% if request.user in post.like_users.all %}
+          <input type="submit" value="좋아요 취소 {{ post.like_users.count }}">
+        {% else %}
+          <input type="submit" value="좋아요 {{ post.like_users.count }}">
+        {% endif %}
+      {% else %}
+        <input type="submit" value="좋아요 {{ post.like_users.count }}" disabled>
+      {% endif %}
+    </form>
 
 
     <hr>
@@ -56,7 +67,7 @@
       <p>댓글 내용 - {{ comment.content }}</p>
       
       {# 댓글 좋아요 #}
-      
+
       <hr>
     {% endfor %}
 </div>

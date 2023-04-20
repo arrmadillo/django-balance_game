@@ -74,3 +74,13 @@ def comment_create(request, post_pk):
         comment.post = post
         comment.save()
     return redirect('posts:detail', post.pk)
+
+#게시글 좋아요
+@login_required
+def likes(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    if post.like_users.filter(pk=request.user.pk).exists():
+        post.like_users.remove(request.user)
+    else:
+        post.like_users.add(request.user)
+    return redirect('posts:detail', post_pk)
