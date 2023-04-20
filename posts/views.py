@@ -2,15 +2,28 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
+from django.db.models import Count
 
 # Create your views here.
 
 def index(request):
     posts = Post.objects.all()
+    get_order = request.GET.get('order','')
+    posts = sort_order(posts, get_order)
     context = {
         'posts': posts,
+        'get_order': get_order,
     }
     return render(request, 'posts/index.html', context)
+
+def sort_order(queryset, order):
+    if order == '참여많은 순서':
+        return queryset.alias(voter=(Count('select1_user')+Count('select2_user'))).order_by('-voter')
+    elif order == '참여적은 순서':
+        return queryset.alias(voter=(Count('select1_user')+Count('select2_user'))).order_by('voter')
+    else:
+        return queryset
+
 
 def detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
@@ -85,6 +98,7 @@ def likes(request, post_pk):
         post.like_users.add(request.user)
     return redirect('posts:detail', post_pk)
 
+
 # 댓글 좋아요
 @login_required
 def comment_like(request, post_pk, comment_pk):
@@ -96,5 +110,4 @@ def comment_like(request, post_pk, comment_pk):
     else:
         comment.like_users.add(request.user)
     return redirect('posts:detail', post_pk)
-
 
