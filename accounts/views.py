@@ -86,3 +86,20 @@ def profile(request, username):
         'person': person,
     }
     return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+def follow(request, user_pk):
+    user = get_user_model()
+    you = user.objects.get(pk=user_pk)
+    me = request.user
+
+    # 자기 자신 팔로우 x
+    if you != me:
+        # 이미 팔로우 중
+        if me in you.followings.all():
+            you.followings.remove(me)
+        else:
+            you.followings.add(me)
+        
+        return redirect(request, 'accounts:profile.html', you.username)

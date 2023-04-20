@@ -7,7 +7,7 @@
         <p>제목 - {{ post.title }}</p>
     </div>
     <div class="row">
-        <p>작성자 - {{ post.user }}</p>
+        <p>작성자 - <a href="{% url 'accounts:profile' post.user %}">{{ post.user }}</a></p>
     </div>
 
     <div class="row">
