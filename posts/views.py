@@ -84,3 +84,17 @@ def likes(request, post_pk):
     else:
         post.like_users.add(request.user)
     return redirect('posts:detail', post_pk)
+
+# 댓글 좋아요
+@login_required
+def comment_like(request, post_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+
+    # 이미 좋아요 한 경우
+    if comment.like_users.filter(pk=request.user.pk).exists():
+        comment.like_users.remove(request.user)
+    else:
+        comment.like_users.add(request.user)
+    return redirect('posts:detail', post_pk)
+
+
