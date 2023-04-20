@@ -97,9 +97,10 @@ def follow(request, user_pk):
     # 자기 자신 팔로우 x
     if you != me:
         # 이미 팔로우 중
-        if me in you.followings.all():
-            you.followings.remove(me)
+        if me in you.followers.all():
+            you.followers.remove(me)
+            return redirect('accounts:profile', you.username)
         else:
-            you.followings.add(me)
-        
-        return redirect(request, 'accounts:profile.html', you.username)
+            you.followers.add(me)
+            return redirect('accounts:profile', you.username)
+    return redirect('accounts:profile', you.username)

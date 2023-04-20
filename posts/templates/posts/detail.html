@@ -65,8 +65,17 @@
     {% for comment in comments %}
       <p>댓글 작성자 - <a href="{% url 'accounts:profile' comment.user %}">{{ comment.user }}</p></a>
       <p>댓글 내용 - {{ comment.content }}</p>
-      
+      <p>댓글 좋아요 - {{ comment.like_users.count }}</p>
       {# 댓글 좋아요 #}
+      <form action="{% url 'posts:comment_like' post_pk=post.pk comment_pk=comment.pk %}" method="POST">
+        {% csrf_token %}
+        {% if request.user in comment.like_users.all %}
+            <input type="submit" value='좋아요 취소'>
+        {% else %}
+            <input type="submit" value='좋아요'>
+        {% endif %}
+        
+      </form>
 
       <hr>
     {% endfor %}
