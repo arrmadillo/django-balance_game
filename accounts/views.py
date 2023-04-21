@@ -3,6 +3,7 @@ from django.contrib.auth import login as auth_login, logout as auth_logout, upda
 from .forms import CustomUserChangeForm, CustomUserCreationForm, CustomUserAuthenticationForm, CustomUserPasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 
 # Create your views here.
 def login(request):
@@ -99,8 +100,14 @@ def follow(request, user_pk):
         # 이미 팔로우 중
         if me in you.followers.all():
             you.followers.remove(me)
-            return redirect('accounts:profile', you.username)
+            is_followd = False
         else:
             you.followers.add(me)
-            return redirect('accounts:profile', you.username)
+            is_followd = True
+        context = {
+            'is_followed': is_followd,
+            'followings_count': you.followings.count(),
+            'followers_count': you.followers.count(),
+        }
+        return JsonResponse(context)
     return redirect('accounts:profile', you.username)
