@@ -33,7 +33,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['port-0-balance-game-e9btb72blgqfvbx9.sel3.cloudtype.app', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -117,9 +117,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-us' # ko-kr
+LANGUAGE_CODE = 'en-us' # ko-kr
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC' # 
 
 USE_I18N = True
 
