@@ -5,6 +5,7 @@ from .forms import PostForm, CommentForm
 from django.db.models import Count
 from django.utils import timezone
 from datetime import timedelta
+from django.http import JsonResponse
 # Create your views here.
 
 def index(request):
@@ -38,17 +39,29 @@ def sort_order(queryset, order):
         return queryset.alias(likes=Count('like_users')).order_by('-likes')
     elif order == 'newest':
         return queryset.order_by('-pk')
+    elif order == 'old':
+        return queryset.order_by('pk')
     else:
         return queryset
 
 
 def detail(request, post_pk):
-    post = Post.objects.prefetch_related('comment_set').get(pk=post_pk)
+    # 역참조 및 m:n - prefetch_related
+    # 정참조 - select_related
+
+    # 게시글
+    post = Post.objects.select_related('user').prefetch_related(
+                                        'comment_set', 'select1_user',
+                                        'select2_user', 'like_users').get(pk=post_pk)
+
     select1_user_count = post.select1_user.count()
     select2_user_count = post.select2_user.count()
-
     
-    comments = post.comment_set.all()
+    # 댓글
+    comments = post.comment_set.select_related('user').prefetch_related('like_users').all()
+    get_order = request.GET.get('order','')
+    comments = sort_order(comments, get_order)
+    
     comment_form = CommentForm()
 
     context = {
@@ -112,9 +125,19 @@ def likes(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     if post.like_users.filter(pk=request.user.pk).exists():
         post.like_users.remove(request.user)
+        is_liked = False
     else:
         post.like_users.add(request.user)
-    return redirect('posts:detail', post_pk)
+        is_liked = True
+    
+    # 게시글 좋아요 수
+    post_like_count = post.like_users.count()
+    
+    context = {
+          'is_liked': is_liked,
+          'post_like_count': post_like_count,
+    }
+    return JsonResponse(context)
 
 
 # 댓글 좋아요

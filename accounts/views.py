@@ -72,7 +72,7 @@ def change_password(request):
             update_session_auth_hash(request, user)
             return redirect('posts:index')
     else:
-        form = CustomUserPasswordChangeForm()
+        form = CustomUserPasswordChangeForm(request.user)
     context = {
         'form':form,
     }
@@ -81,10 +81,13 @@ def change_password(request):
 
 def profile(request, username):
     User = get_user_model()
-    person = User.objects.get(username=username)
+    person = User.objects.prefetch_related('followings', 'followers', 'post_set','comment_set').get(username=username)
 
+    comments = person.comment_set.select_related('post').all()
+    
     context = {
         'person': person,
+        'comments':comments,
     }
     return render(request, 'accounts/profile.html', context)
 
@@ -105,9 +108,9 @@ def follow(request, user_pk):
             you.followers.add(me)
             is_followd = True
         context = {
-            'is_followed': is_followd,
+            'is_followed'     : is_followd,
             'followings_count': you.followings.count(),
-            'followers_count': you.followers.count(),
+            'followers_count' : you.followers.count(),
         }
         return JsonResponse(context)
     return redirect('accounts:profile', you.username)
