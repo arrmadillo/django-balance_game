@@ -1,75 +1,84 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ person.username }} 님의 프로필 페이지</h1>
 
-{% comment %} 비로그인 유저 구분 {% endcomment %}
-{% if request.user.is_authenticated %}
-    {% if request.user != person %}
-        <form action="{% url 'accounts:follow' person.pk %}" method="POST">
-            {% csrf_token %}
-            {% if request.user in person.followers.all %}
-                <input type="submit" value="팔로우 취소">
-            {% else %}
-                <input type="submit" value="팔로우">
+<div class="container">
+    <div class="row">
+        <h1>{{ person.username }} 님의 프로필 페이지</h1>
+        {% comment %} 팔로우 버튼 {% endcomment %}
+        {% if request.user.is_authenticated %}
+        {% if request.user != person %}
+            <form action="{% url 'accounts:follow' person.pk %}" method="POST">
+                {% csrf_token %}
+                {% if request.user in person.followers.all %}
+                    <input type="submit" value="팔로우 취소">
+                {% else %}
+                    <input type="submit" value="팔로우">
+                {% endif %}
+            </form>
+        {% else %}
+        {% endif %}
+        {% else %}
+        {% endif %}
+    </div>
+    <div class="row">
+        <h2>팔로잉 목록</h2>
+        {% for following in person.followings.all %}
+        <div>
+            <a href="{% url 'accounts:profile' following.username %}">{{ following.username }}</a>
+        </div>
+        {% endfor %}
+        <hr>
+    </div>
+    <div class="row">
+        <h2>팔로워 목록</h2>
+        {% for follower in person.followers.all %}
+            <div>
+            <a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a>
+            </div>
+        {% endfor %}
+        <hr>
+    </div>
+    <div class="row">
+        <h2>맞팔 목록</h2>
+        {% for follower in person.followers.all %}
+            {% if person in follower.followers.all %}
+            <div>
+                <a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a>
+            </div>
             {% endif %}
-        </form>
-    {% else %}
-    {% endif %}
-{% else %}
-{% endif %}
-
-<h2>팔로잉 목록</h2>
-    {% for following in person.followings.all %}
-      <div>
-        <a href="{% url 'accounts:profile' following.username %}">{{ following.username }}</a>
-      </div>
-    {% endfor %}
-    
-    <hr>
-<h2>팔로워 목록</h2>
-{% for follower in person.followers.all %}
-    <div>
-    <a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a>
+        {% endfor %}
+        <hr> 
     </div>
-{% endfor %}
-<hr>
-
-<h2>맞팔 목록</h2>
-{% for follower in person.followers.all %}
-    {% if person in follower.followers.all %}
-    <div>
-        <a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a>
+    <div class="row">
+        <h2>내가 좋아요한 글</h2>
+        {% for post in person.like_posts.all %}
+            <a href="{% url 'posts:detail' post.pk %}">
+                {{ post.title }}
+            </a>
+        {% endfor %}
+        <hr> 
     </div>
-    {% endif %}
-{% endfor %}
-<hr> 
-
-<h2>내가 좋아요한 글</h2>
-{% for post in person.like_posts.all %}
-    <a href="{% url 'posts:detail' post.pk %}">
-        {{ post.title }}
-    </a>
-{% endfor %}
-<hr> 
-
-<h2>내가 작성한 글</h2>
-{% for post in person.post_set.all %}
-    <a href="{% url 'posts:detail' post.pk %}">
-        {{ post.title }}
-    </a>
-{% endfor %}
-<hr> 
-
-<h2>내가 작성한 댓글</h2>
-{% for comment in person.comment_set.all %}
-    <p>
-        <a href="{% url 'posts:detail' comment.post.pk %}">
-            {{ comment.content }}
-        </a>
-    </p>
-    
-{% endfor %}
-<hr> 
-
+    <div class="row">
+        <h2>내가 작성한 글</h2>
+        {% for post in person.post_set.all %}
+            <a href="{% url 'posts:detail' post.pk %}">
+                {{ post.title }}
+            </a>
+        {% endfor %}
+        <hr> 
+    </div>
+    <div class="row">
+        <h2>내가 작성한 댓글</h2>
+        {% for comment in person.comment_set.all %}
+            <p>
+                <a href="{% url 'posts:detail' comment.post.pk %}">
+                    {{ comment.content }}
+                </a>
+            </p>
+            
+        {% endfor %}
+        <hr> 
+    </div>
+</div>
 {% endblock content %}
