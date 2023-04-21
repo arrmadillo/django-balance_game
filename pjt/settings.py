@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'posts',
     # 설치
     'imagekit',
-    'debug_toolbar',
     # 기본
     'django.contrib.admin',
     'django.contrib.auth',
