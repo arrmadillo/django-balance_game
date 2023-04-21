@@ -18,13 +18,18 @@
       <a href="{% url 'accounts:signup' %}">[회원가입]</a>
     </div>
   {% endif %}
-  {# 참여순 정렬 #}
-  <form action="{% url 'posts:index' %}">
-    {% if get_order == '참여많은 순서' %}
-      <input type="submit" name="order" value="참여적은 순서">
-    {% else %}
-      <input type="submit" name="order" value="참여많은 순서">
-    {% endif %}
+  {# 정렬 #}
+  <form action="{% url 'posts:index' %}" method="GET">
+    <button type="submit" name="order" value="voter">참여순</button>
+    <button type="submit" name="order" value="likes">좋아요순</button>
+    <button type="submit" name="order" value="newest">최신순</button>
+  </form>
+  {# 기간 #}
+  <form action="{% url 'posts:index' %}" method="GET">
+    <button type="submit" name="date_filter" value="">전체</button>
+    <button type="submit" name="date_filter" value="30">월</button>
+    <button type="submit" name="date_filter" value="7">주</button>
+    <button type="submit" name="date_filter" value="1">일</button>
   </form>
   {% for post in posts %}
     <p><a href="{% url 'posts:detail' post.pk %}">{{ post.title }}</a></p>

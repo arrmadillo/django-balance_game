@@ -3,24 +3,41 @@ from django.contrib.auth.decorators import login_required
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.db.models import Count
-
+from django.utils import timezone
+from datetime import timedelta
 # Create your views here.
 
 def index(request):
-    posts = Post.objects.all()
+    posts = Post.objects.order_by('-pk')
+
+    get_date_filter = request.GET.get('date_filter','')
+    posts = filter_date(posts, get_date_filter)
+
     get_order = request.GET.get('order','')
     posts = sort_order(posts, get_order)
+
     context = {
         'posts': posts,
         'get_order': get_order,
     }
     return render(request, 'posts/index.html', context)
 
+
+def filter_date(queryset, date_filter):
+    if date_filter:
+        date_filter = int(date_filter)
+        return queryset.filter(created_at__gte=timezone.now()-timedelta(days=date_filter))
+    else:
+        return queryset
+
+
 def sort_order(queryset, order):
-    if order == '참여많은 순서':
+    if order == 'voter':
         return queryset.alias(voter=(Count('select1_user')+Count('select2_user'))).order_by('-voter')
-    elif order == '참여적은 순서':
-        return queryset.alias(voter=(Count('select1_user')+Count('select2_user'))).order_by('voter')
+    elif order == 'likes':
+        return queryset.alias(likes=Count('like_users')).order_by('-likes')
+    elif order == 'newest':
+        return queryset.order_by('-pk')
     else:
         return queryset
 
