@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     # 로컬
     'accounts',
     'posts',
+    # 설치
+    'imagekit',
     # 기본
     'django.contrib.admin',
     'django.contrib.auth',

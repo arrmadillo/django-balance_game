@@ -1,41 +1,67 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block style %}
-<style>
-  canvas {
-    max-width: 500px;
-    max-height: 500px;
-    margin: 0 auto;
-  }
-</style>
+canvas {
+  max-width: 500px;
+  max-height: 500px;
+  margin: 0 auto;
+}
+nav {
+  height: 75px;
+}
+body{
+  font-family: 'Dovemayo_gothic';
+}
+@font-face {
+  font-family: 'Dovemayo_gothic';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
 {% endblock style %}
 {% block content %}
+<nav class="sticky-top bg-white text-success-emphasis mb-4 border-bottom border-success-subtle">
+  <div class="container">
+    <div class="row d-flex justify-content-between">
+      <div class="col-1 justify-content-between">
+        <a class="mt-3 d-flex align-items-center justify-content-between" href="{% url 'posts:index' %}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#006400" class="d-flex justify-content-center bi bi-rocket-takeoff-fill" viewBox="0 0 16 16">
+            <path d="M12.17 9.53c2.307-2.592 3.278-4.684 3.641-6.218.21-.887.214-1.58.16-2.065a3.578 3.578 0 0 0-.108-.563 2.22 2.22 0 0 0-.078-.23V.453c-.073-.164-.168-.234-.352-.295a2.35 2.35 0 0 0-.16-.045 3.797 3.797 0 0 0-.57-.093c-.49-.044-1.19-.03-2.08.188-1.536.374-3.618 1.343-6.161 3.604l-2.4.238h-.006a2.552 2.552 0 0 0-1.524.734L.15 7.17a.512.512 0 0 0 .433.868l1.896-.271c.28-.04.592.013.955.132.232.076.437.16.655.248l.203.083c.196.816.66 1.58 1.275 2.195.613.614 1.376 1.08 2.191 1.277l.082.202c.089.218.173.424.249.657.118.363.172.676.132.956l-.271 1.9a.512.512 0 0 0 .867.433l2.382-2.386c.41-.41.668-.949.732-1.526l.24-2.408Zm.11-3.699c-.797.8-1.93.961-2.528.362-.598-.6-.436-1.733.361-2.532.798-.799 1.93-.96 2.528-.361.599.599.437 1.732-.36 2.531Z"/>
+            <path d="M5.205 10.787a7.632 7.632 0 0 0 1.804 1.352c-1.118 1.007-4.929 2.028-5.054 1.903-.126-.127.737-4.189 1.839-5.18.346.69.837 1.35 1.411 1.925Z"/>
+          </svg>
+        </a>
+      </div>
+      <div class="col-3 d-flex align-items-center justify-content-start">
+        <a class="mt-3 text-success-emphasis d-flex justify-content-start" href="{% url 'posts:index' %}" style="color:#006400;text-decoration-line:none;font-size:x-large;">
+          BALANCE GAME
+        </a>
+      </div>
+        {% if user.is_authenticated %}
+          <div class="col-8 d-flex align-items-center justify-content-end">
+            <p class="m-0 mt-3 me-3 pe-1 hidden">
+              <a class="link-success link-underline-light m-1" style="text-decoration-line:none;" href="{% url 'accounts:profile' user %}">
+                {{ user }}
+              </a> 님 안녕하세요!
+            </p>
+            <form class="text-white" action="{% url 'accounts:logout' %}" method="POST">
+              {% csrf_token %}
+              <a href="{% url 'accounts:update' %}"  class="mt-3 btn btn-success me-1 pt-2">회원정보 수정</a>
+              <a href="{% url 'posts:create' %}" class="mt-3 btn btn-success me-1 pt-2">주제 작성</a>
+              <input class="mt-3 btn btn-success" type="submit" value="로그아웃">
+            </form>
+          </div>
+        {% else %}
+          <div class="col-8 d-flex align-items-center justify-content-end">
+            <a href="{% url 'accounts:login' %}" class="btn btn-success ms-3 mt-3 me-1 pt-2">로그인</a>
+            <a href="{% url 'accounts:signup' %}" class="btn btn-success ms-1 mt-3 me-1 pt-2">회원가입</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
 <div class="container">
-<div>
-  <canvas id="myChart"></canvas>
-	<script>
-		var ctx = document.getElementById('myChart').getContext('2d');
-		var myChart = new Chart(ctx, {
-			type: 'pie',
-			data: {
-				labels: ['{{ post.select1_content }}', '{{ post.select2_content }}'],
-				datasets: [{
-					label: 'Vote Results',
-					data: [{{ post.select1_user.count }}, {{ post.select2_user.count }}],
-					backgroundColor: [
-						'rgba(255, 99, 132, 0.5)',
-						'rgba(54, 162, 235, 0.5)',
-					],
-					borderWidth: 1
-				}]
-			},
-			options: {
-				responsive: true,
-				maintainAspectRatio: false
-			}
-		});
-	</script>
-</div>
+
     <div class="row">
         <p>제목 - {{ post.title }}</p>
     </div>
@@ -44,34 +70,52 @@
     </div>
 
     <div class="row">
-        <div class="col">
+        <div class="col-3">
             <p>선택1: {{ post.select1_content }}</p>
-            <img src="{{ post.select1_image.url }}" alt="" width='200px'>
-        </div>
-        <div class="col">
-            <p>선택2: {{ post.select2_content }}</p>
-            <img src="{{ post.select2_image.url }}" alt="" width='200px'>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col">
+            <img src="{{ post.select1_image.url }}" alt="" width='200px' height='200px'>
             <form action="{% url 'posts:select' post_pk=post.pk answer=post.select1_content %}">
-                {% csrf_token %}
-                <button type="submit">{{ post.select1_content }}</button>
+              {% csrf_token %}
+              <button type="submit">{{ post.select1_content }}</button>
             </form>
             <p>{{ select1_user_count }}</p>
         </div>
-        <div class="col">
+        
+        <div class='col-6'>
+          <canvas id="myChart"></canvas>
+          <script>
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+              type: 'pie',
+              data: {
+                labels: ['{{ post.select1_content }}', '{{ post.select2_content }}'],
+                datasets: [{
+                  label: 'Vote Results',
+                  data: [{{ post.select1_user.count }}, {{ post.select2_user.count }}],
+                  backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false
+              }
+            });
+          </script>
+        </div>
+
+        <div class="col-3">
+            <p>선택2: {{ post.select2_content }}</p>
+            <img src="{{ post.select2_image.url }}" alt="" width='200px' height='200px'>
             <form action="{% url 'posts:select' post_pk=post.pk answer=post.select2_content %}">
-                {% csrf_token %}
-                <button type="submit">{{ post.select2_content }}</button>
+              {% csrf_token %}
+              <button type="submit">{{ post.select2_content }}</button>
             </form>
             <p>{{ select2_user_count }}</p>
         </div>
     </div>
-
 
 
     {# 게시글 좋아요 #}
