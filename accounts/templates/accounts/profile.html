@@ -9,41 +9,27 @@
         <form action="{% url 'accounts:follow' person.pk %}" method="POST">
             {% csrf_token %}
             {% if request.user in person.followers.all %}
-                <input type="submit" value="팔로우 취소">
+                <input type="submit" value="팔로우 취소" class="btn btn-primary">
             {% else %}
-                <input type="submit" value="팔로우">
+                <input type="submit" value="팔로우" class="btn btn-primary">
             {% endif %}
         </form>
     {% else %}
     {% endif %}
 {% else %}
+<input type="submit" value="팔로우" class="btn btn-primary disabled">
 {% endif %}
 
-<h2>팔로잉 목록</h2>
-    {% for following in person.followings.all %}
-      <div>
-        <a href="{% url 'accounts:profile' following.username %}">{{ following.username }}</a>
-      </div>
-    {% endfor %}
-    
-    <hr>
-<h2>팔로워 목록</h2>
-{% for follower in person.followers.all %}
-    <div>
-    <a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a>
-    </div>
-{% endfor %}
-<hr>
-
-<h2>맞팔 목록</h2>
-{% for follower in person.followers.all %}
-    {% if person in follower.followers.all %}
-    <div>
-        <a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a>
-    </div>
-    {% endif %}
-{% endfor %}
-<hr> 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+  팔로잉 {{ person.followings.count }} 명
+</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+  팔로워 {{ person.followers.count }} 명
+</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3">
+  맞팔 목록
+</button>
 
 <h2>내가 좋아요한 글</h2>
 {% for post in person.like_posts.all %}
@@ -72,4 +58,60 @@
 {% endfor %}
 <hr> 
 
+
+    <!-- Modal -->
+    {# following #}
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ person.username }} 님의 팔로잉 목록</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {% for following in person.followings.all %}
+              <p><a href="{% url 'accounts:profile' following.username %}">{{ following.username }}</a></p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    {# follower #}
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ person.username }} 님의 팔로워 목록</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {% for follower in person.followers.all %}
+              <p><a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a></p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# following & follower #}
+    <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ person.username }} 님의 맞팔 목록</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {% for follower in person.followers.all %}
+              {% if person in follower.followers.all %}
+              <p>
+                  <a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a>
+              </p>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock content %}
