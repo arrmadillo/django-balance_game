@@ -43,10 +43,11 @@ def sort_order(queryset, order):
 
 
 def detail(request, post_pk):
-    post = Post.objects.get(pk=post_pk)
+    post = Post.objects.prefetch_related('comment_set').get(pk=post_pk)
     select1_user_count = post.select1_user.count()
     select2_user_count = post.select2_user.count()
 
+    
     comments = post.comment_set.all()
     comment_form = CommentForm()
 

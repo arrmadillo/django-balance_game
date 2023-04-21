@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'posts',
     # 설치
     'imagekit',
+    'debug_toolbar',
     # 기본
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 디버그 툴바
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'pjt.urls'
@@ -142,3 +145,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # MEDIA_ROOT에서 제공되는 미디어 파일에 대한 주소를 생성
 MEDIA_URL = '/media/'
+
+
+# 디버그 툴바
+INTERNAL_IPS = ['127.0.0.1','localhost',]

@@ -141,7 +141,7 @@ body{
       <input type="submit" value="댓글 작성">
     </form>
     <hr>
-    {% for comment in comments %}
+    {% for comment in post.comment_set.all %}
       <p>댓글 작성자 - <a href="{% url 'accounts:profile' comment.user %}">{{ comment.user }}</p></a>
       <p>댓글 내용 - {{ comment.content }}</p>
       <p>댓글 좋아요 - {{ comment.like_users.count }}</p>
