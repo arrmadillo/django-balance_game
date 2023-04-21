@@ -22,7 +22,14 @@
   <form action="{% url 'posts:index' %}" method="GET">
     <button type="submit" name="order" value="voter">참여순</button>
     <button type="submit" name="order" value="likes">좋아요순</button>
-    <button type="submit" name="order" value="last">최신순</button>
+    <button type="submit" name="order" value="newest">최신순</button>
+  </form>
+  {# 기간 #}
+  <form action="{% url 'posts:index' %}" method="GET">
+    <button type="submit" name="date_filter" value="">전체</button>
+    <button type="submit" name="date_filter" value="30">월</button>
+    <button type="submit" name="date_filter" value="7">주</button>
+    <button type="submit" name="date_filter" value="1">일</button>
   </form>
   {% for post in posts %}
     <p><a href="{% url 'posts:detail' post.pk %}">{{ post.title }}</a></p>
