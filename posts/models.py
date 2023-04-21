@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 class Post(models.Model):
     title           = models.CharField(max_length=20)
@@ -14,6 +16,16 @@ class Post(models.Model):
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
 
+    select1_image_thumbnail = ImageSpecField(source='select1_image',
+                                      processors=[ResizeToFill(50, 100)],
+                                      format='JPEG',
+                                      options={'quality': 100})
+    
+    select2_image_thumbnail = ImageSpecField(source='select2_image',
+                                      processors=[ResizeToFill(50, 100)],
+                                      format='JPEG',
+                                      options={'quality': 100})
+    
 class Comment(models.Model):
     user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_commnet')

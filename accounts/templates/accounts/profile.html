@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="container">
   <div class="row">
@@ -22,18 +22,27 @@
     {% endif %}
 
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
-    팔로잉 {{ person.followings.count }} 명
-  </button>
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-    팔로워 <span id="followers-count">{{ person.followers.all|length }}</span> 명
-  </button>
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3">
-    맞팔 목록
-  </button>
+	
+  <div class="d-flex">
+		<div class="mx-2">
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+				팔로잉 {{ person.followings.count }} 명
+			</button>
+		</div>
+		<div class="mx-2">
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+				팔로워 <span id="followers-count">{{ person.followers.count }}</span> 명
+			</button>
+		</div>
+		<div class="mx-2">
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3">
+				맞팔 목록
+			</button>
+		</div>
+	</div>
 
   <div class="row">
-		<h2>내가 좋아요한 글</h2>
+		<h2>{{ person.username }} 님이 좋아요한 글</h2>
 		{% for post in person.like_posts.all %}
 			<a href="{% url 'posts:detail' post.pk %}">
 				{{ post.title }}
@@ -42,7 +51,7 @@
 		<hr> 
 	</div>
 	<div class="row">
-		<h2>내가 작성한 글</h2>
+		<h2>{{ person.username }} 님이 작성한 글</h2>
 		{% for post in person.post_set.all %}
 			<a href="{% url 'posts:detail' post.pk %}">
 				{{ post.title }}
@@ -51,8 +60,8 @@
 		<hr> 
 	</div>
 	<div class="row">
-		<h2>내가 작성한 댓글</h2>
-		{% for comment in person.comment_set.all %}
+		<h2>{{ person.username }} 님이 작성한 댓글</h2>
+		{% for comment in  comments %}
 			<p>
 				<a href="{% url 'posts:detail' comment.post.pk %}">
 					{{ comment.content }}
