@@ -121,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'ko-kr'
 
 # TIME_ZONE = 'UTC'
-TIME_ZONE = 'Seoul/Asia'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
