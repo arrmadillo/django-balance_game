@@ -1,5 +1,7 @@
-const form = document.querySelector('#follow-form')
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+
+// person 팔로우 ajax
+const form = document.querySelector('#follow-form')
 form.addEventListener('submit', function (event) {
   event.preventDefault()
   const userId = event.target.dataset.userId

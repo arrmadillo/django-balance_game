@@ -2,14 +2,11 @@
 {% load static %}
 
 {% block style %}
-{% comment %} * {
-  padding: 2px;
-  border: 2px solid #000;
-} {% endcomment %}
 {% endblock style %}
 
 {% block content %}
 <div class="container">
+  <!-- 게시글 -->
   <div class="row">
     <p class="mt-4" style="color:#006400; font-size:x-large">{{ post.title }}</p>
   </div>
@@ -24,7 +21,9 @@
       좋아요: {{ post.like_users.count }}
     </p>
   </div>
+  <!-- balance -->
   <div class="row mt-5 d-flex justify-content-center">
+    <!-- select1 -->
     <div class="col-3 d-flex flex-column justify-content-center" style="align-items-stretch">
       <p class="d-flex justify-content-center" style="font-size:large">{{ post.select1_content }}</p>
       <div class="mt-3 d-flex justify-content-center">
@@ -42,17 +41,19 @@
           <button class="btn btn-outline-success" type="submit">선택</button>
         {% endif %}
       </form>
-        <p class="mt-3 d-flex justify-content-center">{{ select1_user_count }}</p>
-      </div>
-      <div class='col-6' style="width:300px; height:300px;">
-        {% if request.user in post.select1_user.all or request.user in post.select2_user.all %}
-          <canvas id="myChart"></canvas>
-        {% else %}
-        
-        {% endif %}
-      </div>
-      <div class="col-3 d-flex flex-column justify-content-center" style="align-items-stretch">
-        <p class="d-flex justify-content-center" style="font-size:large">{{ post.select2_content }}</p>
+      <p class="mt-3 d-flex justify-content-center">{{ select1_user_count }}</p>
+    </div>
+    <!-- 그래프 -->
+    <div class='col-6' style="width:300px; height:300px;">
+      {% if request.user in post.select1_user.all or request.user in post.select2_user.all %}
+        <canvas id="myChart"></canvas>
+      {% else %}
+      
+      {% endif %}
+    </div>
+    <!-- select2 -->
+    <div class="col-3 d-flex flex-column justify-content-center" style="align-items-stretch">
+      <p class="d-flex justify-content-center" style="font-size:large">{{ post.select2_content }}</p>
       <div class="mt-3 d-flex justify-content-center">
         {% if post.select2_image %}
           <img class="mt-3 d-flex justify-content-center" src="{{ post.select2_image.url }}" alt="" width='200px' height='200px'>
@@ -89,7 +90,7 @@
     </form>
   </div>
 
-  {# 댓글 #}
+  {# 댓글 작성 #}
   <form class="ms-4 d-flex justify-content-start text-center align-self-center" action="{% url 'posts:comment_create' post.pk %}" method="POST">
     {% csrf_token %}
     {{ comment_form.as_p }}
@@ -98,7 +99,7 @@
     </div>
   </form>
   <hr>
-  {# 댓글 #}
+  {# 댓글 정렬 / 댓글 수 #}
   <div class="mb-5">
     <div class="d-flex justify-content-between align-items-center">
       <div>
@@ -113,6 +114,7 @@
         댓글 수 : ({{ comments | length }})
       </div>
     </div>
+    <!-- 댓글 리스트 -->
     <div class="mt-3 d-flex justify-content-start">
       <ul>
         <div>
@@ -153,7 +155,6 @@
   </div>
 </div>
 {% endblock content %}
-
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

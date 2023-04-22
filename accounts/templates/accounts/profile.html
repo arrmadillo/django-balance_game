@@ -7,7 +7,7 @@
 <div class="container">
   <div class="row">
     <h1>{{ person.username }} 님의 프로필 페이지</h1>
-    {% comment %} 팔로우 버튼 {% endcomment %}
+    <!-- 팔로우 버튼 -->
     {% if request.user.is_authenticated %}
       {% if request.user != person %}
         <form id="follow-form" data-user-id="{{ person.pk }}" >
@@ -21,7 +21,7 @@
       {% else %}
       {% endif %}
     {% else %}
-    <input type="submit" value="팔로우" class="btn btn-primary disabled">
+			<input type="submit" value="팔로우" class="btn btn-primary disabled">
     {% endif %}
 	</div>
 
@@ -76,11 +76,11 @@
 
 	<!-- Modal -->
 	{# following #}
-	<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">{{ person.username }} 님의 팔로잉 목록</h1>
+					<h1 class="modal-title fs-5" id="exampleModalLabel1">{{ person.username }} 님의 팔로잉 목록</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
@@ -92,11 +92,11 @@
 		</div>
 	</div>
 	{# follower #}
-	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">{{ person.username }} 님의 팔로워 목록</h1>
+					<h1 class="modal-title fs-5" id="exampleModalLabel2">{{ person.username }} 님의 팔로워 목록</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
@@ -108,18 +108,18 @@
 		</div>
 	</div>
 	{# following & follower #}
-	<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">{{ person.username }} 님의 맞팔 목록</h1>
+					<h1 class="modal-title fs-5" id="exampleModalLabel3">{{ person.username }} 님의 맞팔 목록</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					{% for follower in person.followers.all %}
 						{% if person in follower.followers.all %}
 						<p>
-								<a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a>
+							<a href="{% url 'accounts:profile' follower.username %}">{{ follower.username }}</a>
 						</p>
 						{% endif %}
 					{% endfor %}

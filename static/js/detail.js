@@ -1,6 +1,7 @@
-const form = document.querySelector('#like-forms')
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
+// 게시글 좋아요 ajax
+const form = document.querySelector('#like-forms')
 form.addEventListener('submit', function (event) {
   event.preventDefault()
   const postId = event.target.dataset.postId
