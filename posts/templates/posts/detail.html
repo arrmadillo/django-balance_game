@@ -38,6 +38,7 @@
           <p class="mt-3 d-flex justify-content-center">{{ select1_user_count }}</p>
         </div>
         
+        {% comment %} 원형그래프 {% endcomment %}
         <div class='col-6' style="width:300px; height:300px;">
           {% if request.user in post.select1_user.all or request.user in post.select2_user.all %}
             <canvas id="myChart"></canvas>
